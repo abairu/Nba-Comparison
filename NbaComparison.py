@@ -121,7 +121,7 @@ def check_player2(*args):
                 found = True
                 
     if len(duplicates_id) == 1:
-        valid_player1.set('')
+        valid_player2.set('')
         player2_id = dictionary['id']
         categories = ['PTS', 'AST', 'BLK', 'STL', 'REB', 'FG_PCT', 'FG3_PCT', 'FT_PCT']
         curr_row = 3
