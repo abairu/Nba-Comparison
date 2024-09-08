@@ -2,7 +2,8 @@ from nba_api.stats.static import players
 from nba_api.stats.endpoints import playercareerstats
 from tkinter import *
 from tkinter import ttk
-         
+
+
 
 def check_player1(*args):
     for button in mainframe.grid_slaves():
@@ -34,10 +35,9 @@ def check_player1(*args):
 
         for c in categories:
             ttk.Label(mainframe, text = c).grid(column=curr_col, row=curr_row, sticky=W)
-            career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=player1_id).get_data_frames()[1].loc[:,c][0]
-            games_played = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=player1_id).get_data_frames()[1].loc[:,'GP'][0]
+            career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'PerGame',player_id=player1_id).get_data_frames()[1].loc[:,c][0]
             
-            career_avg = round(career_stats/games_played, 2) if 'PCT' not in c else round(career_stats, 2)
+            career_avg = round(career_stats, 2)
              
                       
             ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
@@ -56,7 +56,6 @@ def check_player1(*args):
     
          
     if found == False:
-        print('hi')
         valid_player1.set("Invalid entry. Please type the player's full name.")
 
 def duplicate_player1(id, data_start):
@@ -72,12 +71,10 @@ def duplicate_player1(id, data_start):
 
     for c in categories:
         ttk.Label(mainframe, text = c).grid(column=curr_col, row=curr_row, sticky=W)
-        career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=id).get_data_frames()[1].loc[:,c][0]
-        games_played = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=id).get_data_frames()[1].loc[:,'GP'][0]
+        career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'PerGame',player_id=id).get_data_frames()[1].loc[:,c][0]
         
-        career_avg = round(career_stats/games_played, 2) if 'PCT' not in c else round(career_stats, 2)
-            
-                    
+        career_avg = round(career_stats, 2)
+             
         ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
         curr_row += 1               
     
@@ -95,12 +92,10 @@ def duplicate_player2(id, data_start):
 
     for c in categories:
         ttk.Label(mainframe, text = c).grid(column=curr_col, row=curr_row, sticky=W)
-        career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=player2_id).get_data_frames()[1].loc[:,c][0]
-        games_played = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=player2_id).get_data_frames()[1].loc[:,'GP'][0]
+        career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'PerGame',player_id=player2_id).get_data_frames()[1].loc[:,c][0]
         
-        career_avg = round(career_stats/games_played, 2) if 'PCT' not in c else round(career_stats, 2)
+        career_avg = round(career_stats, 2)
             
-                    
         ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
         curr_row += 1
      
@@ -134,10 +129,9 @@ def check_player2(*args):
 
         for c in categories:
             ttk.Label(mainframe, text = c).grid(column=curr_col, row=curr_row, sticky=W)
-            career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=player2_id).get_data_frames()[1].loc[:,c][0]
-            games_played = playercareerstats.PlayerCareerStats(per_mode36 = 'Totals',player_id=player2_id).get_data_frames()[1].loc[:,'GP'][0]
+            career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'PerGame',player_id=player2_id).get_data_frames()[1].loc[:,c][0]
             
-            career_avg = round(career_stats/games_played, 2) if 'PCT' not in c else round(career_stats, 2)
+            career_avg = round(career_stats, 2)
              
                       
             ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
@@ -193,8 +187,7 @@ for child in mainframe.winfo_children():
     child.grid_configure(padx=5, pady=5)
 
 player1_entry.focus()
-root.bind("<Return>", check_player1)
-root.bind("<Return>", check_player2)
+
 
 root.mainloop()
 
