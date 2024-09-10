@@ -3,6 +3,7 @@ from nba_api.stats.endpoints import playercareerstats
 from tkinter import *
 from tkinter import ttk
 
+
 # The function that will run once the user clicks on the 'player1' button
 def check_player1(*args):
 
