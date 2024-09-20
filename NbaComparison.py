@@ -15,6 +15,8 @@ def check_player1(*args):
 
     # This will keep track of whether the string entered in our 'player1' entry is valid
     found = False
+    unique = False
+    id = 0
     # The 'player1' entry
     full_name = str(player1.get())
     # Calls the 'nba_api' module 'players', returns a list of dictionaries that contains 
@@ -26,14 +28,25 @@ def check_player1(*args):
     duplicates_id = []
 
     # Search the players we found and store their 'player_id'
-    for dictionary in x:
-        if full_name.lower() == dictionary['full_name'].lower():
-                duplicates_id.append(dictionary['id'])
-                found = True
-    # If the player name is unique, go straight to displaying their stats            
+    if unique == False:
+        for dictionary in x:
+            if full_name.lower() == dictionary['full_name'].lower():
+                    duplicates_id.append(dictionary['id'])
+                    found = True
+
     if len(duplicates_id) == 1:
+         unique = True
+         id = duplicates_id[0]
+
+    if len(args) > 0:
+         unique = True
+         id = args[0]
+
+    # If the player name is unique, go straight to displaying their stats            
+    if unique == True:
+        found = True
         valid_player1.set('')
-        player1_id = dictionary['id']
+        player1_id = id
         categories = ['PTS', 'AST', 'BLK', 'STL', 'REB', 'FG_PCT', 'FG3_PCT', 'FT_PCT']
         curr_row = 3
         curr_col = 1
@@ -50,12 +63,12 @@ def check_player1(*args):
             ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
             curr_row += 1
     # If there are players with the same name, display buttons of the players' unique 'player_id'
-    if len(duplicates_id) > 1:
+    else:
          valid_player1.set("There are multiple players with this name. Please choose one based on their player IDs below.")
          curr_row = 3
-         for id in duplicates_id:
+         for player_id in duplicates_id:
             # Clicking each duplicate player's button will execute the 'duplicate_player1' function with the 'player_id' parameter 
-            ttk.Button(mainframe, text=id, command=lambda id=id: duplicate_player1(id)).grid(column=1, row=curr_row, sticky = W)
+            ttk.Button(mainframe, text=player_id, command=lambda args=(player_id): check_player1(args)).grid(column=1, row=curr_row, sticky = W)
 
 
             curr_row+=1
@@ -64,49 +77,7 @@ def check_player1(*args):
     if found == False:
         valid_player1.set("Invalid entry. Please type the player's full name.")
 
-# This function is for when we have duplicate players. It's the same as the 'check_player1' function, but it requires 
-# a unique 'id' (player_id) parameter and doesn't check for duplicates
-def duplicate_player1(id):
-    for button in mainframe.grid_slaves():
-         if int(button.grid_info()["row"]) > 2 and int(button.grid_info()["column"]) < 3:
-              button.grid_remove()
-         
-    valid_player1.set('')
-    #player_id = id
-    categories = ['PTS', 'AST', 'BLK', 'STL', 'REB', 'FG_PCT', 'FG3_PCT', 'FT_PCT']
-    curr_row = 3
-    curr_col = 1
 
-    for c in categories:
-        ttk.Label(mainframe, text = c).grid(column=curr_col, row=curr_row, sticky=W)
-        career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'PerGame',player_id=id).get_data_frames()[1].loc[:,c][0]
-        
-        career_avg = round(career_stats, 2)
-             
-        ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
-        curr_row += 1               
-    
-# Same as 'duplicate_player1', but for player2
-def duplicate_player2(id):
-    for button in mainframe.grid_slaves():
-         if int(button.grid_info()["row"]) > 2 and int(button.grid_info()["column"]) >= 3:
-              button.grid_remove()
-         
-    valid_player2.set('')
-    player2_id = id
-    categories = ['PTS', 'AST', 'BLK', 'STL', 'REB', 'FG_PCT', 'FG3_PCT', 'FT_PCT']
-    curr_row = 3
-    curr_col = 3
-
-    for c in categories:
-        ttk.Label(mainframe, text = c).grid(column=curr_col, row=curr_row, sticky=W)
-        career_stats = playercareerstats.PlayerCareerStats(per_mode36 = 'PerGame',player_id=player2_id).get_data_frames()[1].loc[:,c][0]
-        
-        career_avg = round(career_stats, 2)
-            
-        ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
-        curr_row += 1
-     
 # Same as 'check_player1', but for player2
 def check_player2(*args):
 
@@ -114,21 +85,34 @@ def check_player2(*args):
          if int(button.grid_info()["row"]) > 2 and int(button.grid_info()["column"]) >= 3:
               button.grid_remove()
 
+    unique = False
     found = False
+    id = 0
+
     full_name = str(player2.get())
     x = players.find_players_by_full_name(full_name)
 
     duplicates_id = []
 
 
-    for dictionary in x:
-        if full_name.lower() == dictionary['full_name'].lower():
-                duplicates_id.append(dictionary['id'])
-                found = True
-                
+    if unique == False:
+        for dictionary in x:
+            if full_name.lower() == dictionary['full_name'].lower():
+                    duplicates_id.append(dictionary['id'])
+                    found = True
+    
     if len(duplicates_id) == 1:
+         unique = True
+         id = duplicates_id[0]
+
+    if len(args) > 0:
+         unique = True
+         id = args[0]
+
+    if unique == True:
+        found = True
         valid_player2.set('')
-        player2_id = dictionary['id']
+        player2_id = id
         categories = ['PTS', 'AST', 'BLK', 'STL', 'REB', 'FG_PCT', 'FG3_PCT', 'FT_PCT']
         curr_row = 3
         curr_col = 3
@@ -143,11 +127,11 @@ def check_player2(*args):
             ttk.Label(mainframe, text = str(career_avg)).grid(column=curr_col+1, row=curr_row, sticky=W)
             curr_row += 1
 
-    if len(duplicates_id) > 1:
+    else:
          valid_player2.set("There are multiple players with this name. Please choose one based on their player IDs below.")
          curr_row = 3
-         for id in duplicates_id:
-            ttk.Button(mainframe, text=id, command=lambda id=id: duplicate_player2(id)).grid(column=3, row=curr_row, sticky = W)
+         for player_id in duplicates_id:
+            ttk.Button(mainframe, text=player_id, command=lambda args=(player_id): check_player2(args)).grid(column=3, row=curr_row, sticky = W)
 
 
             curr_row+=1
